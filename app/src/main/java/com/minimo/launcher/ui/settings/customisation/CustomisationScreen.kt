@@ -390,6 +390,15 @@ fun CustomisationScreen(
                 onUpdateCharacters = viewModel::onUpdateIgnoreSpecialCharacters
             )
 
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+            ToggleItem(
+                title = stringResource(R.string.hide_app_drawer_search),
+                subtitle = stringResource(R.string.hide_app_drawer_search_description),
+                isChecked = state.hideAppDrawerSearch,
+                onToggleClick = viewModel::onToggleHideAppDrawerSearch
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
         }
 

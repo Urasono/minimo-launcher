@@ -233,6 +233,16 @@ class CustomisationViewModel @Inject constructor(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            preferenceHelper.getHideAppDrawerSearch()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(hideAppDrawerSearch = enable)
+                    }
+                }
+        }
     }
 
     fun onThemeModeChanged(mode: ThemeMode) {
@@ -378,6 +388,12 @@ class CustomisationViewModel @Inject constructor(
         viewModelScope.launch {
             val uniqueCharacters = characters.trim().toSet().joinToString("")
             preferenceHelper.setIgnoreSpecialCharacters(uniqueCharacters)
+        }
+    }
+
+    fun onToggleHideAppDrawerSearch() {
+        viewModelScope.launch {
+            preferenceHelper.hideAppDrawerSearch(_state.value.hideAppDrawerSearch.not())
         }
     }
 }

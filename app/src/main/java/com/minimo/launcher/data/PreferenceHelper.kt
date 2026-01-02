@@ -50,6 +50,7 @@ class PreferenceHelper @Inject constructor(
             intPreferencesKey("KEY_HOME_APP_VERTICAL_PADDING")
         private val KEY_IGNORE_SPECIAL_CHARACTERS_IN_SEARCH =
             stringPreferencesKey("KEY_IGNORE_SPECIAL_CHARACTERS_IN_SEARCH")
+        private val KEY_HIDE_APP_DRAWER_SEARCH = booleanPreferencesKey("KEY_HIDE_APP_DRAWER_SEARCH")
     }
 
     suspend fun setIsIntroCompleted(isCompleted: Boolean) {
@@ -323,5 +324,15 @@ class PreferenceHelper @Inject constructor(
         return preferences.data.map {
             it[KEY_IGNORE_SPECIAL_CHARACTERS_IN_SEARCH] ?: ""
         }
+    }
+
+    suspend fun hideAppDrawerSearch(enable: Boolean) {
+        preferences.edit {
+            it[KEY_HIDE_APP_DRAWER_SEARCH] = enable
+        }
+    }
+
+    fun getHideAppDrawerSearch(): Flow<Boolean> {
+        return preferences.data.map { it[KEY_HIDE_APP_DRAWER_SEARCH] ?: false }
     }
 }
