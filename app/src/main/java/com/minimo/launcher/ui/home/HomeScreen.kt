@@ -63,13 +63,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.minimo.launcher.R
 import com.minimo.launcher.ui.components.EmptyScreenView
 import com.minimo.launcher.ui.components.RenameAppDialog
+import com.minimo.launcher.ui.components.ScreenTimeView
 import com.minimo.launcher.ui.components.SheetDragHandle
 import com.minimo.launcher.ui.components.TimeAndDateView
 import com.minimo.launcher.ui.home.components.AppNameItem
+import com.minimo.launcher.ui.home.components.MinimoSettingsItem
 import com.minimo.launcher.ui.home.components.SearchItem
+import com.minimo.launcher.ui.theme.Dimens
 import com.minimo.launcher.utils.launchApp
 import com.minimo.launcher.utils.launchAppInfo
 import com.minimo.launcher.utils.lockScreen
+import com.minimo.launcher.utils.openDigitalWellbeing
 import com.minimo.launcher.utils.showNotificationDrawer
 import com.minimo.launcher.utils.uninstallApp
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -247,7 +251,7 @@ fun HomeScreen(
             sheetContent = {
                 SheetDragHandle(isExpanded = state.isBottomSheetExpanded)
 
-                if (!state.drawerSearchBarAtBottom) {
+                if (!state.hideAppDrawerSearch && !state.drawerSearchBarAtBottom) {
                     AppDrawerSearch(
                         focusRequester = focusRequester,
                         searchText = state.searchText,
@@ -266,6 +270,21 @@ fun HomeScreen(
                         .weight(1f),
                     contentPadding = PaddingValues(top = 16.dp, bottom = systemNavigationHeight)
                 ) {
+                    if (state.hideAppDrawerSearch && !state.drawerSearchBarAtBottom) {
+                        item(key = "minimo_settings") {
+                            MinimoSettingsItem(
+                                modifier = Modifier.animateItem(),
+                                horizontalArrangement = state.appsArrangement,
+                                textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
+                                onClick = {
+                                    hideKeyboardWithClearFocus()
+                                    onSettingsClick()
+                                },
+                                verticalPadding = state.homeAppVerticalPadding.dp
+                            )
+                        }
+                    }
+
                     items(items = state.filteredAllApps, key = { it.id }) { appInfo ->
                         AppNameItem(
                             modifier = Modifier.animateItem(),
@@ -288,9 +307,24 @@ fun HomeScreen(
                             verticalPadding = state.homeAppVerticalPadding.dp
                         )
                     }
+
+                    if (state.hideAppDrawerSearch && state.drawerSearchBarAtBottom) {
+                        item(key = "minimo_settings") {
+                            MinimoSettingsItem(
+                                modifier = Modifier.animateItem(),
+                                horizontalArrangement = state.appsArrangement,
+                                textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
+                                onClick = {
+                                    hideKeyboardWithClearFocus()
+                                    onSettingsClick()
+                                },
+                                verticalPadding = state.homeAppVerticalPadding.dp
+                            )
+                        }
+                    }
                 }
 
-                if (state.drawerSearchBarAtBottom) {
+                if (!state.hideAppDrawerSearch && state.drawerSearchBarAtBottom) {
                     AppDrawerSearch(
                         focusRequester = focusRequester,
                         searchText = state.searchText,
@@ -332,13 +366,35 @@ fun HomeScreen(
                         .fillMaxSize()
                         .consumeWindowInsets(paddingValues)
                 ) {
-                    if (state.showHomeClock) {
-                        TimeAndDateView(
-                            horizontalAlignment = state.homeClockAlignment,
-                            clockMode = state.homeClockMode,
-                            twentyFourHourFormat = state.twentyFourHourFormat,
-                            showBatteryLevel = state.showBatteryLevel
-                        )
+                    if (state.showHomeClock || state.showScreenTimeWidget) {
+                        Column(
+                            modifier = Modifier.padding(
+                                horizontal = Dimens.APP_HORIZONTAL_SPACING,
+                                vertical = 16.dp
+                            )
+                        ) {
+                            if (state.showHomeClock) {
+                                TimeAndDateView(
+                                    horizontalAlignment = state.homeClockAlignment,
+                                    clockMode = state.homeClockMode,
+                                    twentyFourHourFormat = state.twentyFourHourFormat,
+                                    showBatteryLevel = state.showBatteryLevel
+                                )
+                            }
+
+                            if (state.showScreenTimeWidget && state.screenTime.isNotEmpty()) {
+                                if (state.showHomeClock) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+
+                                ScreenTimeView(
+                                    horizontalAlignment = state.homeClockAlignment,
+                                    screenTime = state.screenTime,
+                                    refreshScreenTime = viewModel::refreshScreenTime,
+                                    onClick = context::openDigitalWellbeing
+                                )
+                            }
+                        }
                     }
 
                     LazyColumn(
@@ -419,7 +475,7 @@ private fun AppDrawerSearch(
         ) {
             Icon(
                 imageVector = Icons.Filled.Settings,
-                contentDescription = "Settings"
+                contentDescription = stringResource(R.string.settings)
             )
         }
     }

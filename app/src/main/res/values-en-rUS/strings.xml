@@ -9,9 +9,9 @@
     <string name="senior_launcher">Senior Launcher</string>
     <string name="senior_launcher_description">Simplified Launcher for Seniors</string>
 
-    <string name="favourite_apps">Favourite Apps</string>
+    <string name="favourite_apps">Favorite Apps</string>
     <string name="hidden_apps">Hidden Apps</string>
-    <string name="customisation">Customisation</string>
+    <string name="customisation">Customization</string>
     <string name="set_default_launcher">Set Default Launcher</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="rate_application">Rate Application</string>
@@ -20,7 +20,7 @@
     <string name="skip">Skip</string>
 
     <string name="left">Left</string>
-    <string name="center">Centre</string>
+    <string name="center">Center</string>
     <string name="right">Right</string>
 
     <string name="theme">Theme</string>
@@ -34,8 +34,8 @@
     <string name="full">Full</string>
     <string name="time_only">Time Only</string>
     <string name="date_only">Date Only</string>
-    <string name="remove_favourite">Remove Favourite</string>
-    <string name="add_favourite">Add Favourite</string>
+    <string name="remove_favourite">Remove Favorite</string>
+    <string name="add_favourite">Add Favorite</string>
     <string name="rename">Rename</string>
     <string name="hide_app">Hide App</string>
     <string name="unhide_app">Unhide App</string>
@@ -46,8 +46,8 @@
     <string name="show_keyboard_when_the_drawer_is_opened">Show keyboard when the drawer is opened</string>
     <string name="double_tap_to_lock">Double Tap To Lock</string>
     <string name="on_home_screen_double_tap_on_empty_space_to_lock">On the home screen, double-tap on empty space to lock the screen</string>
-    <string name="dynamic_colours">Dynamic Colours</string>
-    <string name="adapt_theme_colours_based_on_system_settings">Adapt theme colours based on system settings</string>
+    <string name="dynamic_colours">Dynamic Colors</string>
+    <string name="adapt_theme_colours_based_on_system_settings">Adapt theme colors based on system settings</string>
     <string name="home_app_size">Home App Size:</string>
     <string name="sample_app">Sample App</string>
     <string name="show_home_clock">Show Home Clock</string>
@@ -64,10 +64,10 @@
     <string name="open_settings">Open Settings</string>
     <string name="twenty_four_hour_format">24 Hour Format</string>
     <string name="show_battery_level">Show Battery Level</string>
-    <string name="no_favourites_added">No favourites added</string>
-    <string name="add_your_favourite_apps_to_access_them_easily">Add your favourite apps to access them easily</string>
-    <string name="add_favourite_apps">Add favourite apps</string>
-    <string name="favourites_only">Favourites only</string>
+    <string name="no_favourites_added">No favorites added</string>
+    <string name="add_your_favourite_apps_to_access_them_easily">Add your favorite apps to access them easily</string>
+    <string name="add_favourite_apps">Add favorite apps</string>
+    <string name="favourites_only">Favorites only</string>
     <string name="hidden_only">Hidden only</string>
     <string name="show_hidden_apps">Show Hidden Apps</string>
     <string name="show_hidden_apps_in_the_search_result_of_the_app_drawer">Show hidden apps in the search result of the app drawer</string>
@@ -95,7 +95,7 @@
     <string name="these_characters_will_be_ignored_when_searching_for_apps_in_home_screen">These characters will be ignored when searching for apps on the home screen</string>
     <string name="search_app">Search app</string>
     <string name="get_started">Get Started</string>
-    <string name="reorder_favourites">Reorder Favourites</string>
+    <string name="reorder_favourites">Reorder Favorites</string>
     <string name="hide_app_drawer_search">Hide App Drawer Search</string>
     <string name="hide_app_drawer_search_description">When the app drawer search is hidden, the Minimo Settings is shown in the app drawer list</string>
     <string name="minimo_settings">Minimo Settings</string>

@@ -29,5 +29,8 @@ data class HomeScreenState(
     val autoOpenApp: Boolean = false,
     val hideAppDrawerArrow: Boolean = false,
     val homeAppVerticalPadding: Int = Constants.DEFAULT_HOME_VERTICAL_PADDING,
-    val ignoreSpecialCharacters: String = ""
+    val ignoreSpecialCharacters: String = "",
+    val hideAppDrawerSearch: Boolean = false,
+    val showScreenTimeWidget: Boolean = false,
+    val screenTime: String = "",
 )

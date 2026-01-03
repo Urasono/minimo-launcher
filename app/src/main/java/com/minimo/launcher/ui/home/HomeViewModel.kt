@@ -1,5 +1,7 @@
 package com.minimo.launcher.ui.home
 
+import android.content.Context
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
 import androidx.lifecycle.ViewModel
@@ -13,8 +15,12 @@ import com.minimo.launcher.utils.HomeAppsAlignment
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomePressedNotifier
 import com.minimo.launcher.utils.NotificationDotsNotifier
+import com.minimo.launcher.utils.ScreenTimeHelper
+import com.minimo.launcher.utils.isAppUsagePermissionGranted
 import com.minimo.launcher.utils.updateNotificationDots
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +33,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,6 +44,9 @@ class HomeViewModel @Inject constructor(
     private val preferenceHelper: PreferenceHelper,
     private val homePressedNotifier: HomePressedNotifier,
     private val notificationDotsNotifier: NotificationDotsNotifier,
+    @ApplicationContext
+    private val applicationContext: Context,
+    private val screenTimeHelper: ScreenTimeHelper
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeScreenState())
     val state: StateFlow<HomeScreenState> = _state
@@ -46,6 +56,8 @@ class HomeViewModel @Inject constructor(
 
     private val _launchApp = Channel<AppInfo>(Channel.BUFFERED)
     val launchApp: Flow<AppInfo> = _launchApp.receiveAsFlow()
+
+    private var lastScreenTimeUpdateTime = 0L
 
     init {
         viewModelScope.launch {
@@ -278,6 +290,29 @@ class HomeViewModel @Inject constructor(
                 }
         }
 
+        viewModelScope.launch {
+            preferenceHelper.getHideAppDrawerSearch()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(hideAppDrawerSearch = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getShowScreenTimeWidget()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(showScreenTimeWidget = enable)
+                    }
+                    if (enable) {
+                        refreshScreenTime()
+                    }
+                }
+        }
+
         listenForHomePressedEvent()
     }
 
@@ -427,6 +462,29 @@ class HomeViewModel @Inject constructor(
             // Filter out the special characters from the app name before searching
             val cleanedAppName = appInfo.name.filterNot { ignoreSpecialCharacters.contains(it) }
             !appInfo.isHidden && cleanedAppName.contains(searchText, ignoreCase = true)
+        }
+    }
+
+    fun refreshScreenTime() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && applicationContext.isAppUsagePermissionGranted()) {
+            // Only continue if 1 minute has been passed since last update
+            if (System.currentTimeMillis() - lastScreenTimeUpdateTime < 60_000) return
+
+            viewModelScope.launch(Dispatchers.IO) {
+                val totalMillis = screenTimeHelper.getTodayScreenTimeMillis()
+
+                val hours = TimeUnit.MILLISECONDS.toHours(totalMillis)
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(totalMillis) % 60
+                val formattedTime = if (hours > 0) "${hours}h ${minutes}m" else "${minutes}m"
+
+                _state.update { it.copy(screenTime = formattedTime) }
+
+                lastScreenTimeUpdateTime = System.currentTimeMillis()
+            }
+        } else {
+            viewModelScope.launch {
+                preferenceHelper.showScreenTimeWidget(false)
+            }
         }
     }
 }

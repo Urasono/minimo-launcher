@@ -233,6 +233,26 @@ class CustomisationViewModel @Inject constructor(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            preferenceHelper.getHideAppDrawerSearch()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(hideAppDrawerSearch = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getShowScreenTimeWidget()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(showScreenTimeWidget = enable)
+                    }
+                }
+        }
     }
 
     fun onThemeModeChanged(mode: ThemeMode) {
@@ -378,6 +398,24 @@ class CustomisationViewModel @Inject constructor(
         viewModelScope.launch {
             val uniqueCharacters = characters.trim().toSet().joinToString("")
             preferenceHelper.setIgnoreSpecialCharacters(uniqueCharacters)
+        }
+    }
+
+    fun onToggleHideAppDrawerSearch() {
+        viewModelScope.launch {
+            preferenceHelper.hideAppDrawerSearch(_state.value.hideAppDrawerSearch.not())
+        }
+    }
+
+    fun onToggleShowScreenTimeWidget() {
+        viewModelScope.launch {
+            preferenceHelper.showScreenTimeWidget(_state.value.showScreenTimeWidget.not())
+        }
+    }
+
+    fun onAppUsagePermissionNotGrantedOnStarted() {
+        viewModelScope.launch {
+            preferenceHelper.showScreenTimeWidget(false)
         }
     }
 }
