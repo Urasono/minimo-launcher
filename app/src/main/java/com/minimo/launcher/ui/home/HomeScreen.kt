@@ -63,14 +63,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.minimo.launcher.R
 import com.minimo.launcher.ui.components.EmptyScreenView
 import com.minimo.launcher.ui.components.RenameAppDialog
+import com.minimo.launcher.ui.components.ScreenTimeView
 import com.minimo.launcher.ui.components.SheetDragHandle
 import com.minimo.launcher.ui.components.TimeAndDateView
 import com.minimo.launcher.ui.home.components.AppNameItem
 import com.minimo.launcher.ui.home.components.MinimoSettingsItem
 import com.minimo.launcher.ui.home.components.SearchItem
+import com.minimo.launcher.ui.theme.Dimens
 import com.minimo.launcher.utils.launchApp
 import com.minimo.launcher.utils.launchAppInfo
 import com.minimo.launcher.utils.lockScreen
+import com.minimo.launcher.utils.openDigitalWellbeing
 import com.minimo.launcher.utils.showNotificationDrawer
 import com.minimo.launcher.utils.uninstallApp
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -363,13 +366,35 @@ fun HomeScreen(
                         .fillMaxSize()
                         .consumeWindowInsets(paddingValues)
                 ) {
-                    if (state.showHomeClock) {
-                        TimeAndDateView(
-                            horizontalAlignment = state.homeClockAlignment,
-                            clockMode = state.homeClockMode,
-                            twentyFourHourFormat = state.twentyFourHourFormat,
-                            showBatteryLevel = state.showBatteryLevel
-                        )
+                    if (state.showHomeClock || state.showScreenTimeWidget) {
+                        Column(
+                            modifier = Modifier.padding(
+                                horizontal = Dimens.APP_HORIZONTAL_SPACING,
+                                vertical = 16.dp
+                            )
+                        ) {
+                            if (state.showHomeClock) {
+                                TimeAndDateView(
+                                    horizontalAlignment = state.homeClockAlignment,
+                                    clockMode = state.homeClockMode,
+                                    twentyFourHourFormat = state.twentyFourHourFormat,
+                                    showBatteryLevel = state.showBatteryLevel
+                                )
+                            }
+
+                            if (state.showScreenTimeWidget && state.screenTime.isNotEmpty()) {
+                                if (state.showHomeClock) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+
+                                ScreenTimeView(
+                                    horizontalAlignment = state.homeClockAlignment,
+                                    screenTime = state.screenTime,
+                                    refreshScreenTime = viewModel::refreshScreenTime,
+                                    onClick = context::openDigitalWellbeing
+                                )
+                            }
+                        }
                     }
 
                     LazyColumn(

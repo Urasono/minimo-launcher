@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
-import com.minimo.launcher.ui.theme.Dimens
 import com.minimo.launcher.utils.HomeClockMode
 import com.minimo.launcher.utils.openDefaultCalendarApp
 import com.minimo.launcher.utils.openDefaultClockApp
@@ -68,12 +66,7 @@ fun TimeAndDateView(
 
     Column(
         horizontalAlignment = horizontalAlignment,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = Dimens.APP_HORIZONTAL_SPACING,
-                vertical = 16.dp
-            )
+        modifier = Modifier.fillMaxWidth()
     ) {
         if (clockMode != HomeClockMode.DateOnly) {
             Text(

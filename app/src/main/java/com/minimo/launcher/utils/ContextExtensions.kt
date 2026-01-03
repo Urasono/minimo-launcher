@@ -1,5 +1,6 @@
 package com.minimo.launcher.utils
 
+import android.app.AppOpsManager
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
@@ -14,6 +15,7 @@ import android.provider.AlarmClock
 import android.provider.CalendarContract
 import android.provider.Settings
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import com.minimo.launcher.R
@@ -297,6 +299,48 @@ fun Context.openNotificationSettings() {
             .putExtra(EXTRA_FRAGMENT_ARGS, showFragmentArgs)
 
         startActivity(intent)
+    } catch (exception: Exception) {
+        Timber.e(exception)
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+fun Context.isAppUsagePermissionGranted(): Boolean {
+    val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    val mode = appOps.unsafeCheckOpNoThrow(
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        Process.myUid(),
+        packageName
+    )
+    return mode == AppOpsManager.MODE_ALLOWED
+}
+
+// Thanks to Olauncher -> https://github.com/tanujnotes/Olauncher
+fun Context.openDigitalWellbeing() {
+    val intent = Intent()
+    try {
+        intent.setClassName(
+            "com.google.android.apps.wellbeing",
+            "com.google.android.apps.wellbeing.settings.TopLevelSettingsActivity"
+        )
+        startActivity(intent)
+    } catch (e: Exception) {
+        Timber.e(e)
+        try {
+            intent.setClassName(
+                "com.samsung.android.forest",
+                "com.samsung.android.forest.launcher.LauncherActivity"
+            )
+            startActivity(intent)
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+    }
+}
+
+fun Context.openUsageAccessSettings() {
+    try {
+        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
     } catch (exception: Exception) {
         Timber.e(exception)
     }

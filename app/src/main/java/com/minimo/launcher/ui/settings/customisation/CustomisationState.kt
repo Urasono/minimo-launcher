@@ -28,5 +28,6 @@ data class CustomisationState(
     val notificationDot: Boolean = false,
     val homeAppVerticalPadding: Float = Constants.DEFAULT_HOME_VERTICAL_PADDING.toFloat(),
     val ignoreSpecialCharacters: String = "",
-    val hideAppDrawerSearch: Boolean = false
+    val hideAppDrawerSearch: Boolean = false,
+    val showScreenTimeWidget: Boolean = false
 )

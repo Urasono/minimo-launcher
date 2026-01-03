@@ -42,6 +42,7 @@ import com.minimo.launcher.ui.settings.customisation.components.AppsAlignmentDro
 import com.minimo.launcher.ui.settings.customisation.components.ClockAlignmentDropdown
 import com.minimo.launcher.ui.settings.customisation.components.ClockModeDropdown
 import com.minimo.launcher.ui.settings.customisation.components.EnableAccessibilityDialog
+import com.minimo.launcher.ui.settings.customisation.components.EnableAppUsageDialog
 import com.minimo.launcher.ui.settings.customisation.components.EnableNotificationsDialog
 import com.minimo.launcher.ui.settings.customisation.components.IgnoreSpecialCharacters
 import com.minimo.launcher.ui.settings.customisation.components.ThemeDropdown
@@ -53,8 +54,10 @@ import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomeClockMode
 import com.minimo.launcher.utils.StringUtils
 import com.minimo.launcher.utils.hasLockScreenPermission
+import com.minimo.launcher.utils.isAppUsagePermissionGranted
 import com.minimo.launcher.utils.isNotificationPermissionGranted
 import com.minimo.launcher.utils.openNotificationSettings
+import com.minimo.launcher.utils.openUsageAccessSettings
 import com.minimo.launcher.utils.removeLockScreenPermission
 import com.minimo.launcher.utils.requestLockScreenPermission
 
@@ -68,6 +71,7 @@ fun CustomisationScreen(
 
     var showEnableAccessibilityDialog by remember { mutableStateOf(false) }
     var showEnableNotificationPermissionDialog by remember { mutableStateOf(false) }
+    var showEnableAppUsagePermissionDialog by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -79,6 +83,10 @@ fun CustomisationScreen(
 
             if (!context.isNotificationPermissionGranted()) {
                 viewModel.onNotificationPermissionNotGrantedOnStarted()
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && !context.isAppUsagePermissionGranted()) {
+                viewModel.onAppUsagePermissionNotGrantedOnStarted()
             }
         }
     }
@@ -399,6 +407,27 @@ fun CustomisationScreen(
                 onToggleClick = viewModel::onToggleHideAppDrawerSearch
             )
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+
+                ToggleItem(
+                    title = stringResource(R.string.show_screen_time),
+                    subtitle = stringResource(R.string.show_screen_time_description),
+                    isChecked = state.showScreenTimeWidget,
+                    onToggleClick = {
+                        if (state.showScreenTimeWidget) {
+                            viewModel.onToggleShowScreenTimeWidget()
+                        } else {
+                            if (context.isAppUsagePermissionGranted()) {
+                                viewModel.onToggleShowScreenTimeWidget()
+                            } else {
+                                showEnableAppUsagePermissionDialog = true
+                            }
+                        }
+                    }
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
         }
 
@@ -424,6 +453,19 @@ fun CustomisationScreen(
                 },
                 onDismiss = {
                     showEnableNotificationPermissionDialog = false
+                }
+            )
+        }
+
+        if (showEnableAppUsagePermissionDialog) {
+            EnableAppUsageDialog(
+                onConfirm = {
+                    context.openUsageAccessSettings()
+                    showEnableAppUsagePermissionDialog = false
+                    viewModel.onToggleShowScreenTimeWidget()
+                },
+                onDismiss = {
+                    showEnableAppUsagePermissionDialog = false
                 }
             )
         }
