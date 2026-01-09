@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.minimo.launcher.data.PreferenceHelper
 import com.minimo.launcher.ui.theme.ThemeMode
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
+import com.minimo.launcher.utils.HomeAppsAlignmentVertical
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomeClockMode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,11 +36,21 @@ class CustomisationViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            preferenceHelper.getHomeAppsAlignment()
+            preferenceHelper.getHomeAppsAlignmentHorizontal()
                 .distinctUntilChanged()
                 .collect { alignment ->
                     _state.update {
-                        it.copy(homeAppsAlignment = alignment)
+                        it.copy(homeAppsAlignmentHorizontal = alignment)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getHomeAppsAlignmentVertical()
+                .distinctUntilChanged()
+                .collect { alignment ->
+                    _state.update {
+                        it.copy(homeAppsAlignmentVertical = alignment)
                     }
                 }
         }
@@ -261,9 +272,15 @@ class CustomisationViewModel @Inject constructor(
         }
     }
 
-    fun onHomeAppsAlignmentChanged(alignment: HomeAppsAlignment) {
+    fun onHomeAppsAlignmentHorizontalChanged(alignment: HomeAppsAlignmentHorizontal) {
         viewModelScope.launch {
-            preferenceHelper.setHomeAppsAlignment(alignment)
+            preferenceHelper.setHomeAppsAlignmentHorizontal(alignment)
+        }
+    }
+
+    fun onHomeAppsAlignmentVerticalChanged(alignment: HomeAppsAlignmentVertical) {
+        viewModelScope.launch {
+            preferenceHelper.setHomeAppsAlignmentVertical(alignment)
         }
     }
 

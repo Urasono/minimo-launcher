@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.sp
 import com.minimo.launcher.R
 import com.minimo.launcher.ui.components.DropdownView
 import com.minimo.launcher.ui.theme.Dimens
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
 
 @Composable
-fun AppsAlignmentDropdown(
+fun AppsAlignmentHorizontalDropdown(
     selectedOption: String,
-    options: List<Pair<HomeAppsAlignment, String>>,
-    onOptionSelected: (HomeAppsAlignment) -> Unit
+    options: List<Pair<HomeAppsAlignmentHorizontal, String>>,
+    onOptionSelected: (HomeAppsAlignmentHorizontal) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -33,7 +33,7 @@ fun AppsAlignmentDropdown(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            stringResource(R.string.home_apps_alignment),
+            stringResource(R.string.home_apps_alignment_horizontal),
             modifier = Modifier.weight(1f),
             fontSize = 20.sp
         )

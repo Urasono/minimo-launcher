@@ -3,7 +3,6 @@ package com.minimo.launcher.ui.home
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -249,7 +248,10 @@ fun HomeScreen(
             sheetDragHandle = null,
             sheetShadowElevation = 0.dp,
             sheetContent = {
-                SheetDragHandle(isExpanded = state.isBottomSheetExpanded)
+                SheetDragHandle(
+                    isExpanded = state.isBottomSheetExpanded,
+                    isIconHidden = state.hideAppDrawerArrow
+                )
 
                 if (!state.hideAppDrawerSearch && !state.drawerSearchBarAtBottom) {
                     AppDrawerSearch(
@@ -274,7 +276,7 @@ fun HomeScreen(
                         item(key = "minimo_settings") {
                             MinimoSettingsItem(
                                 modifier = Modifier.animateItem(),
-                                horizontalArrangement = state.appsArrangement,
+                                horizontalArrangement = state.appsArrangementHorizontal,
                                 textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
                                 onClick = {
                                     hideKeyboardWithClearFocus()
@@ -299,7 +301,7 @@ fun HomeScreen(
                             onRenameClick = { viewModel.onRenameAppClick(appInfo) },
                             onToggleHideClick = { viewModel.onToggleHideClick(appInfo) },
                             onAppInfoClick = { context.launchAppInfo(appInfo) },
-                            appsArrangement = state.appsArrangement,
+                            appsArrangement = state.appsArrangementHorizontal,
                             onLongClick = ::hideKeyboardWithClearFocus,
                             onUninstallClick = { context.uninstallApp(appInfo) },
                             textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
@@ -312,7 +314,7 @@ fun HomeScreen(
                         item(key = "minimo_settings") {
                             MinimoSettingsItem(
                                 modifier = Modifier.animateItem(),
-                                horizontalArrangement = state.appsArrangement,
+                                horizontalArrangement = state.appsArrangementHorizontal,
                                 textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
                                 onClick = {
                                     hideKeyboardWithClearFocus()
@@ -403,7 +405,7 @@ fun HomeScreen(
                             .weight(1f)
                             .nestedScroll(nestedScrollConnection),
                         contentPadding = paddingValues,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = state.appsArrangementVertical
                     ) {
                         items(items = state.favouriteApps, key = { it.id }) { appInfo ->
                             AppNameItem(
@@ -421,7 +423,7 @@ fun HomeScreen(
                                 onRenameClick = { viewModel.onRenameAppClick(appInfo) },
                                 onToggleHideClick = { viewModel.onToggleHideClick(appInfo) },
                                 onAppInfoClick = { context.launchAppInfo(appInfo) },
-                                appsArrangement = state.appsArrangement,
+                                appsArrangement = state.appsArrangementHorizontal,
                                 textSize = state.homeTextSize.sp,
                                 onUninstallClick = { context.uninstallApp(appInfo) },
                                 showNotificationDot = appInfo.showNotificationDot,

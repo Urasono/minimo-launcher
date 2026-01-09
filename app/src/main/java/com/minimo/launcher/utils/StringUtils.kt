@@ -14,11 +14,26 @@ object StringUtils {
         }
     }
 
-    fun homeAppsAlignmentText(context: Context, alignment: HomeAppsAlignment?): String {
+    fun homeAppsAlignmentHorizontalText(
+        context: Context,
+        alignment: HomeAppsAlignmentHorizontal?
+    ): String {
         return when (alignment) {
-            HomeAppsAlignment.Start -> context.getString(R.string.left)
-            HomeAppsAlignment.Center -> context.getString(R.string.center)
-            HomeAppsAlignment.End -> context.getString(R.string.right)
+            HomeAppsAlignmentHorizontal.Start -> context.getString(R.string.left)
+            HomeAppsAlignmentHorizontal.Center -> context.getString(R.string.center)
+            HomeAppsAlignmentHorizontal.End -> context.getString(R.string.right)
+            else -> ""
+        }
+    }
+
+    fun homeAppsAlignmentVerticalText(
+        context: Context,
+        alignment: HomeAppsAlignmentVertical?
+    ): String {
+        return when (alignment) {
+            HomeAppsAlignmentVertical.Top -> context.getString(R.string.top)
+            HomeAppsAlignmentVertical.Center -> context.getString(R.string.center)
+            HomeAppsAlignmentVertical.Bottom -> context.getString(R.string.bottom)
             else -> ""
         }
     }
