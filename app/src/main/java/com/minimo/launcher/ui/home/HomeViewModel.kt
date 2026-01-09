@@ -11,7 +11,8 @@ import com.minimo.launcher.data.PreferenceHelper
 import com.minimo.launcher.data.usecase.UpdateAllAppsUseCase
 import com.minimo.launcher.ui.entities.AppInfo
 import com.minimo.launcher.utils.AppUtils
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
+import com.minimo.launcher.utils.HomeAppsAlignmentVertical
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomePressedNotifier
 import com.minimo.launcher.utils.NotificationDotsNotifier
@@ -121,16 +122,31 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            preferenceHelper.getHomeAppsAlignment()
+            preferenceHelper.getHomeAppsAlignmentHorizontal()
                 .distinctUntilChanged()
                 .collect { alignment ->
                     val arrangement = when (alignment) {
-                        HomeAppsAlignment.Start -> Arrangement.Start
-                        HomeAppsAlignment.Center -> Arrangement.Center
-                        HomeAppsAlignment.End -> Arrangement.End
+                        HomeAppsAlignmentHorizontal.Start -> Arrangement.Start
+                        HomeAppsAlignmentHorizontal.Center -> Arrangement.Center
+                        HomeAppsAlignmentHorizontal.End -> Arrangement.End
                     }
                     _state.update {
-                        it.copy(appsArrangement = arrangement)
+                        it.copy(appsArrangementHorizontal = arrangement)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getHomeAppsAlignmentVertical()
+                .distinctUntilChanged()
+                .collect { alignment ->
+                    val arrangement = when (alignment) {
+                        HomeAppsAlignmentVertical.Top -> Arrangement.Top
+                        HomeAppsAlignmentVertical.Center -> Arrangement.Center
+                        HomeAppsAlignmentVertical.Bottom -> Arrangement.Bottom
+                    }
+                    _state.update {
+                        it.copy(appsArrangementVertical = arrangement)
                     }
                 }
         }

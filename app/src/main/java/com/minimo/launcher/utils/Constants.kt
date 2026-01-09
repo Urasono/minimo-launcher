@@ -10,8 +10,12 @@ object Constants {
     val HOME_VERTICAL_PADDING_RANGE by lazy { 4f..20f }
 }
 
-enum class HomeAppsAlignment {
+enum class HomeAppsAlignmentHorizontal {
     Start, Center, End
+}
+
+enum class HomeAppsAlignmentVertical {
+    Top, Center, Bottom
 }
 
 enum class HomeClockAlignment {

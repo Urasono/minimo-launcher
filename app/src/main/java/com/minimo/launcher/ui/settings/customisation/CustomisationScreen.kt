@@ -38,7 +38,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import com.minimo.launcher.R
 import com.minimo.launcher.ui.settings.customisation.components.AppSizeSlider
-import com.minimo.launcher.ui.settings.customisation.components.AppsAlignmentDropdown
+import com.minimo.launcher.ui.settings.customisation.components.AppsAlignmentHorizontalDropdown
+import com.minimo.launcher.ui.settings.customisation.components.AppsAlignmentVerticalDropdown
 import com.minimo.launcher.ui.settings.customisation.components.ClockAlignmentDropdown
 import com.minimo.launcher.ui.settings.customisation.components.ClockModeDropdown
 import com.minimo.launcher.ui.settings.customisation.components.EnableAccessibilityDialog
@@ -49,7 +50,8 @@ import com.minimo.launcher.ui.settings.customisation.components.ThemeDropdown
 import com.minimo.launcher.ui.settings.customisation.components.ToggleItem
 import com.minimo.launcher.ui.theme.ThemeMode
 import com.minimo.launcher.utils.AndroidUtils
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
+import com.minimo.launcher.utils.HomeAppsAlignmentVertical
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomeClockMode
 import com.minimo.launcher.utils.StringUtils
@@ -195,26 +197,48 @@ fun CustomisationScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
-            AppsAlignmentDropdown(
-                selectedOption = StringUtils.homeAppsAlignmentText(
+            AppsAlignmentHorizontalDropdown(
+                selectedOption = StringUtils.homeAppsAlignmentHorizontalText(
                     context = context,
-                    alignment = state.homeAppsAlignment
+                    alignment = state.homeAppsAlignmentHorizontal
                 ),
                 options = listOf(
-                    HomeAppsAlignment.Start to StringUtils.homeAppsAlignmentText(
+                    HomeAppsAlignmentHorizontal.Start to StringUtils.homeAppsAlignmentHorizontalText(
                         context,
-                        HomeAppsAlignment.Start
+                        HomeAppsAlignmentHorizontal.Start
                     ),
-                    HomeAppsAlignment.Center to StringUtils.homeAppsAlignmentText(
+                    HomeAppsAlignmentHorizontal.Center to StringUtils.homeAppsAlignmentHorizontalText(
                         context,
-                        HomeAppsAlignment.Center
+                        HomeAppsAlignmentHorizontal.Center
                     ),
-                    HomeAppsAlignment.End to StringUtils.homeAppsAlignmentText(
+                    HomeAppsAlignmentHorizontal.End to StringUtils.homeAppsAlignmentHorizontalText(
                         context,
-                        HomeAppsAlignment.End
+                        HomeAppsAlignmentHorizontal.End
                     ),
                 ),
-                onOptionSelected = viewModel::onHomeAppsAlignmentChanged
+                onOptionSelected = viewModel::onHomeAppsAlignmentHorizontalChanged
+            )
+
+            AppsAlignmentVerticalDropdown(
+                selectedOption = StringUtils.homeAppsAlignmentVerticalText(
+                    context = context,
+                    alignment = state.homeAppsAlignmentVertical
+                ),
+                options = listOf(
+                    HomeAppsAlignmentVertical.Top to StringUtils.homeAppsAlignmentVerticalText(
+                        context,
+                        HomeAppsAlignmentVertical.Top
+                    ),
+                    HomeAppsAlignmentVertical.Center to StringUtils.homeAppsAlignmentVerticalText(
+                        context,
+                        HomeAppsAlignmentVertical.Center
+                    ),
+                    HomeAppsAlignmentVertical.Bottom to StringUtils.homeAppsAlignmentVerticalText(
+                        context,
+                        HomeAppsAlignmentVertical.Bottom
+                    ),
+                ),
+                onOptionSelected = viewModel::onHomeAppsAlignmentVerticalChanged
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
@@ -462,7 +486,6 @@ fun CustomisationScreen(
                 onConfirm = {
                     context.openUsageAccessSettings()
                     showEnableAppUsagePermissionDialog = false
-                    viewModel.onToggleShowScreenTimeWidget()
                 },
                 onDismiss = {
                     showEnableAppUsagePermissionDialog = false

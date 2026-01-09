@@ -8,7 +8,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.minimo.launcher.ui.theme.ThemeMode
 import com.minimo.launcher.utils.Constants
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
+import com.minimo.launcher.utils.HomeAppsAlignmentVertical
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomeClockMode
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,9 @@ class PreferenceHelper @Inject constructor(
     companion object {
         private val KEY_INTRO_COMPLETED = booleanPreferencesKey("KEY_INTRO_COMPLETED")
         private val KEY_THEME_MODE = stringPreferencesKey("KEY_THEME_MODE")
-        private val KEY_HOME_APPS_ALIGN = stringPreferencesKey("KEY_HOME_APPS_ALIGN")
+        private val KEY_HOME_APPS_ALIGN_HORIZONTAL = stringPreferencesKey("KEY_HOME_APPS_ALIGN")
+        private val KEY_HOME_APPS_ALIGN_VERTICAL =
+            stringPreferencesKey("KEY_HOME_APPS_ALIGN_VERTICAL")
         private val KEY_HOME_CLOCK_ALIGNMENT = stringPreferencesKey("KEY_HOME_CLOCK_ALIGNMENT")
         private val KEY_HOME_CLOCK_MODE = stringPreferencesKey("KEY_HOME_CLOCK_MODE")
         private val KEY_SHOW_HOME_CLOCK = booleanPreferencesKey("KEY_SHOW_HOME_CLOCK")
@@ -87,21 +90,40 @@ class PreferenceHelper @Inject constructor(
         }
     }
 
-    suspend fun setHomeAppsAlignment(alignment: HomeAppsAlignment) {
+    suspend fun setHomeAppsAlignmentHorizontal(alignment: HomeAppsAlignmentHorizontal) {
         preferences.edit {
-            it[KEY_HOME_APPS_ALIGN] = alignment.name
+            it[KEY_HOME_APPS_ALIGN_HORIZONTAL] = alignment.name
         }
     }
 
-    fun getHomeAppsAlignment(): Flow<HomeAppsAlignment> {
+    fun getHomeAppsAlignmentHorizontal(): Flow<HomeAppsAlignmentHorizontal> {
         return preferences.data.map {
-            val alignment = it[KEY_HOME_APPS_ALIGN]
+            val alignment = it[KEY_HOME_APPS_ALIGN_HORIZONTAL]
             if (!alignment.isNullOrBlank()
-                && HomeAppsAlignment.entries.any { entry -> entry.name == alignment }
+                && HomeAppsAlignmentHorizontal.entries.any { entry -> entry.name == alignment }
             ) {
-                HomeAppsAlignment.valueOf(alignment)
+                HomeAppsAlignmentHorizontal.valueOf(alignment)
             } else {
-                HomeAppsAlignment.Start
+                HomeAppsAlignmentHorizontal.Start
+            }
+        }
+    }
+
+    suspend fun setHomeAppsAlignmentVertical(alignment: HomeAppsAlignmentVertical) {
+        preferences.edit {
+            it[KEY_HOME_APPS_ALIGN_VERTICAL] = alignment.name
+        }
+    }
+
+    fun getHomeAppsAlignmentVertical(): Flow<HomeAppsAlignmentVertical> {
+        return preferences.data.map {
+            val alignment = it[KEY_HOME_APPS_ALIGN_VERTICAL]
+            if (!alignment.isNullOrBlank()
+                && HomeAppsAlignmentVertical.entries.any { entry -> entry.name == alignment }
+            ) {
+                HomeAppsAlignmentVertical.valueOf(alignment)
+            } else {
+                HomeAppsAlignmentVertical.Center
             }
         }
     }

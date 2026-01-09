@@ -2,13 +2,15 @@ package com.minimo.launcher.ui.settings.customisation
 
 import com.minimo.launcher.ui.theme.ThemeMode
 import com.minimo.launcher.utils.Constants
-import com.minimo.launcher.utils.HomeAppsAlignment
+import com.minimo.launcher.utils.HomeAppsAlignmentHorizontal
+import com.minimo.launcher.utils.HomeAppsAlignmentVertical
 import com.minimo.launcher.utils.HomeClockAlignment
 import com.minimo.launcher.utils.HomeClockMode
 
 data class CustomisationState(
     val themeMode: ThemeMode? = null,
-    val homeAppsAlignment: HomeAppsAlignment? = null,
+    val homeAppsAlignmentHorizontal: HomeAppsAlignmentHorizontal? = null,
+    val homeAppsAlignmentVertical: HomeAppsAlignmentVertical? = null,
     val homeClockAlignment: HomeClockAlignment? = null,
     val showHomeClock: Boolean = false,
     val showStatusBar: Boolean = true,

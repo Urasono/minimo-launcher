@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SheetDragHandle(isExpanded: Boolean) {
+fun SheetDragHandle(isExpanded: Boolean, isIconHidden: Boolean) {
     val angle by animateFloatAsState(
         targetValue = if (isExpanded) 180f else 0f,
         label = "Sheet drag handle rotation"
@@ -26,10 +26,12 @@ fun SheetDragHandle(isExpanded: Boolean) {
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = Icons.Outlined.KeyboardArrowUp,
-            modifier = Modifier.rotate(angle),
-            contentDescription = null
-        )
+        if (!isIconHidden) {
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowUp,
+                modifier = Modifier.rotate(angle),
+                contentDescription = null
+            )
+        }
     }
 }

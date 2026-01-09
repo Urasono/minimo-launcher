@@ -317,7 +317,7 @@ fun Context.isAppUsagePermissionGranted(): Boolean {
 
 // Thanks to Olauncher -> https://github.com/tanujnotes/Olauncher
 fun Context.openDigitalWellbeing() {
-    val intent = Intent()
+    val intent = Intent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     try {
         intent.setClassName(
             "com.google.android.apps.wellbeing",
