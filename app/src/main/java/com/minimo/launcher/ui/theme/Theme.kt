@@ -46,6 +46,7 @@ fun AppTheme(
     blackTheme: Boolean,
     useDynamicTheme: Boolean,
     statusBarVisible: Boolean,
+    setWallpaper: Boolean,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -117,12 +118,13 @@ fun AppTheme(
             window.setBackgroundDrawable(surfaceColor.toDrawable())
         }
     }
-
-    val wallpaperManager = WallpaperManager.getInstance(context)
-    val wallpaperColor = if (isLightTheme) android.graphics.Color.WHITE else if (blackTheme) android.graphics.Color.BLACK else DarkColorScheme.background.toArgb()
-    val wallpaper = createSolidColorBitmap(wallpaperColor)
-    wallpaperManager.setBitmap(wallpaper)
-
+    if (setWallpaper) {
+        val wallpaperManager = WallpaperManager.getInstance(context)
+        val wallpaperColor =
+            if (isLightTheme) android.graphics.Color.WHITE else if (blackTheme) android.graphics.Color.BLACK else DarkColorScheme.background.toArgb()
+        val wallpaper = createSolidColorBitmap(wallpaperColor)
+        wallpaperManager.setBitmap(wallpaper)
+    }
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

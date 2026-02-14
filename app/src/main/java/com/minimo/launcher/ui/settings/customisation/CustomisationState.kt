@@ -18,6 +18,7 @@ data class CustomisationState(
     val autoOpenKeyboardAllApps: Boolean = false,
     val dynamicTheme: Boolean = false,
     val blackTheme: Boolean = false,
+    val setWallpaper: Boolean = false,
     val homeClockMode: HomeClockMode? = null,
     val doubleTapToLock: Boolean = false,
     val twentyFourHourFormat: Boolean = false,
