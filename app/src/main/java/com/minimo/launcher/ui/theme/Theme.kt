@@ -120,8 +120,7 @@ fun AppTheme(
     }
     if (setWallpaper) {
         val wallpaperManager = WallpaperManager.getInstance(context)
-        val wallpaperColor =
-            if (isLightTheme) android.graphics.Color.WHITE else if (blackTheme) android.graphics.Color.BLACK else DarkColorScheme.background.toArgb()
+		val wallpaperColor = colorScheme.background.toArgb()
         val wallpaper = createSolidColorBitmap(wallpaperColor)
         wallpaperManager.setBitmap(wallpaper)
     }
