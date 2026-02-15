@@ -57,7 +57,8 @@ class MainActivity : ComponentActivity() {
                     themeMode = state.themeMode,
                     statusBarVisible = state.statusBarVisible,
                     useDynamicTheme = state.useDynamicTheme,
-                    blackTheme = state.blackTheme
+                    blackTheme = state.blackTheme,
+                    setWallpaper = state.setWallpaper,
                 ) {
                     AppNavGraph(
                         navController = navController,

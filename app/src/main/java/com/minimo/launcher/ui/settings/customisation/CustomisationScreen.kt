@@ -173,6 +173,12 @@ fun CustomisationScreen(
                 )
             }
 
+            ToggleItem(
+                title = stringResource(R.string.set_wallpaper),
+                isChecked = state.setWallpaper,
+                onToggleClick = viewModel::onToggleSetWallpaper
+            )
+
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 
             Spacer(modifier = Modifier.height(8.dp))

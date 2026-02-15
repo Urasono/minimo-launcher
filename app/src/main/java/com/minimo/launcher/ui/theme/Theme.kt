@@ -1,7 +1,9 @@
 package com.minimo.launcher.ui.theme
 
 import android.app.Activity
+import android.app.WallpaperManager
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.minimo.launcher.utils.AndroidUtils
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.set
 
 private val DarkColorScheme = darkColorScheme()
 
@@ -30,12 +34,19 @@ private val BlackColorScheme = darkColorScheme(
     surface = Color.Black
 )
 
+fun createSolidColorBitmap(color: Int): Bitmap {
+    val bitmap = createBitmap(1, 1)
+    bitmap[0, 0] = color
+    return bitmap
+}
+
 @Composable
 fun AppTheme(
     themeMode: ThemeMode,
     blackTheme: Boolean,
     useDynamicTheme: Boolean,
     statusBarVisible: Boolean,
+    setWallpaper: Boolean,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -60,7 +71,6 @@ fun AppTheme(
             }
         }
     }
-
     fun getLightTheme(context: Context): ColorScheme {
         return if (isDynamicTheme) {
             dynamicLightColorScheme(context)
@@ -108,7 +118,12 @@ fun AppTheme(
             window.setBackgroundDrawable(surfaceColor.toDrawable())
         }
     }
-
+    if (setWallpaper) {
+        val wallpaperManager = WallpaperManager.getInstance(context)
+		val wallpaperColor = colorScheme.background.toArgb()
+        val wallpaper = createSolidColorBitmap(wallpaperColor)
+        wallpaperManager.setBitmap(wallpaper)
+    }
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
