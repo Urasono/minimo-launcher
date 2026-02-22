@@ -114,12 +114,6 @@ fun AppTheme(
                 insetsController.hide(WindowInsetsCompat.Type.statusBars())
             }
 
-            /*            if (enableWallpaper) {
-                            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-                        } else {
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-                        }*/
-
             window.setBackgroundDrawable(surfaceColor.toDrawable())
         }
     }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.minimo.launcher.ui.components.ScreenTimeView
@@ -32,7 +33,8 @@ fun HomeBody(
     state: HomeScreenState,
     viewModel: HomeViewModel,
     homeLazyListState: LazyListState,
-    nestedScrollConnection: NestedScrollConnection
+    nestedScrollConnection: NestedScrollConnection,
+    systemNavigationHeight: Dp
 ) {
     val context = LocalContext.current
 
@@ -77,7 +79,7 @@ fun HomeBody(
             modifier = Modifier
                 .weight(1f)
                 .nestedScroll(nestedScrollConnection),
-            contentPadding = paddingValues,
+            contentPadding = PaddingValues(bottom = systemNavigationHeight),
             verticalArrangement = state.appsArrangementVertical
         ) {
             items(items = state.favouriteApps, key = { it.id }) { appInfo ->

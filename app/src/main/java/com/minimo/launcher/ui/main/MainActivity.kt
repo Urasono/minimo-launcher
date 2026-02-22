@@ -6,18 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.minimo.launcher.ui.navigation.AppNavGraph
@@ -44,30 +36,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val state by viewModel.state.collectAsState()
-            val safeDrawingTop =
-                WindowInsets.statusBars.union(WindowInsets.ime).union(WindowInsets.displayCutout)
 
             ObserveNavigationEvents(
                 navController = navController,
                 homePressedNotifier = viewModel.getHomePressedNotifier()
             )
 
-            Box(modifier = Modifier.windowInsetsPadding(safeDrawingTop)) {
-                AppTheme(
-                    themeMode = state.themeMode,
-                    statusBarVisible = state.statusBarVisible,
-                    useDynamicTheme = state.useDynamicTheme,
-                    blackTheme = state.blackTheme,
-                    setWallpaperToThemeColor = state.setWallpaperToThemeColor,
-                    enableWallpaper = state.enableWallpaper
-                ) {
-                    AppNavGraph(
-                        navController = navController,
-                        onBackPressed = {
-                            onBackPressedDispatcher.onBackPressed()
-                        }
-                    )
-                }
+            AppTheme(
+                themeMode = state.themeMode,
+                statusBarVisible = state.statusBarVisible,
+                useDynamicTheme = state.useDynamicTheme,
+                blackTheme = state.blackTheme,
+                setWallpaperToThemeColor = state.setWallpaperToThemeColor,
+                enableWallpaper = state.enableWallpaper
+            ) {
+                AppNavGraph(
+                    navController = navController,
+                    onBackPressed = {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                )
             }
         }
     }
