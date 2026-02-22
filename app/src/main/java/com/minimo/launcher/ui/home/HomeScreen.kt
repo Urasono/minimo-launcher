@@ -4,31 +4,18 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,39 +29,26 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.minimo.launcher.R
-import com.minimo.launcher.ui.components.EmptyScreenView
 import com.minimo.launcher.ui.components.RenameAppDialog
-import com.minimo.launcher.ui.components.ScreenTimeView
-import com.minimo.launcher.ui.components.SheetDragHandle
-import com.minimo.launcher.ui.components.TimeAndDateView
-import com.minimo.launcher.ui.home.components.AppNameItem
-import com.minimo.launcher.ui.home.components.MinimoSettingsItem
-import com.minimo.launcher.ui.home.components.SearchItem
-import com.minimo.launcher.ui.theme.Dimens
+import com.minimo.launcher.ui.home.components.AppDrawerSheet
+import com.minimo.launcher.ui.home.components.EmptyHomeBody
+import com.minimo.launcher.ui.home.components.HomeBody
 import com.minimo.launcher.utils.launchApp
-import com.minimo.launcher.utils.launchAppInfo
 import com.minimo.launcher.utils.lockScreen
-import com.minimo.launcher.utils.openDigitalWellbeing
 import com.minimo.launcher.utils.showNotificationDrawer
-import com.minimo.launcher.utils.uninstallApp
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -248,190 +222,33 @@ fun HomeScreen(
             sheetDragHandle = null,
             sheetShadowElevation = 0.dp,
             sheetContent = {
-                SheetDragHandle(
-                    isExpanded = state.isBottomSheetExpanded,
-                    isIconHidden = state.hideAppDrawerArrow
+                AppDrawerSheet(
+                    state = state,
+                    viewModel = viewModel,
+                    focusRequester = focusRequester,
+                    allAppsLazyListState = allAppsLazyListState,
+                    systemNavigationHeight = systemNavigationHeight,
+                    onSettingsClick = onSettingsClick,
+                    hideKeyboardWithClearFocus = ::hideKeyboardWithClearFocus
                 )
-
-                if (!state.hideAppDrawerSearch && !state.drawerSearchBarAtBottom) {
-                    AppDrawerSearch(
-                        focusRequester = focusRequester,
-                        searchText = state.searchText,
-                        onSearchTextChange = viewModel::onSearchTextChange,
-                        onSettingsClick = {
-                            hideKeyboardWithClearFocus()
-                            onSettingsClick()
-                        }
-                    )
-                }
-
-                LazyColumn(
-                    state = allAppsLazyListState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    contentPadding = PaddingValues(top = 16.dp, bottom = systemNavigationHeight)
-                ) {
-                    if (state.hideAppDrawerSearch && !state.drawerSearchBarAtBottom) {
-                        item(key = "minimo_settings") {
-                            MinimoSettingsItem(
-                                modifier = Modifier.animateItem(),
-                                horizontalArrangement = state.appsArrangementHorizontal,
-                                textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
-                                onClick = {
-                                    hideKeyboardWithClearFocus()
-                                    onSettingsClick()
-                                },
-                                verticalPadding = state.homeAppVerticalPadding.dp
-                            )
-                        }
-                    }
-
-                    items(items = state.filteredAllApps, key = { it.id }) { appInfo ->
-                        AppNameItem(
-                            modifier = Modifier.animateItem(),
-                            appName = appInfo.name,
-                            isFavourite = appInfo.isFavourite,
-                            isHidden = appInfo.isHidden,
-                            isWorkProfile = appInfo.isWorkProfile,
-                            onClick = {
-                                viewModel.onLaunchAppClick(appInfo)
-                            },
-                            onToggleFavouriteClick = { viewModel.onToggleFavouriteAppClick(appInfo) },
-                            onRenameClick = { viewModel.onRenameAppClick(appInfo) },
-                            onToggleHideClick = { viewModel.onToggleHideClick(appInfo) },
-                            onAppInfoClick = { context.launchAppInfo(appInfo) },
-                            appsArrangement = state.appsArrangementHorizontal,
-                            onLongClick = ::hideKeyboardWithClearFocus,
-                            onUninstallClick = { context.uninstallApp(appInfo) },
-                            textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
-                            showNotificationDot = appInfo.showNotificationDot,
-                            verticalPadding = state.homeAppVerticalPadding.dp
-                        )
-                    }
-
-                    if (state.hideAppDrawerSearch && state.drawerSearchBarAtBottom) {
-                        item(key = "minimo_settings") {
-                            MinimoSettingsItem(
-                                modifier = Modifier.animateItem(),
-                                horizontalArrangement = state.appsArrangementHorizontal,
-                                textSize = if (state.applyHomeAppSizeToAllApps) state.homeTextSize.sp else 20.sp,
-                                onClick = {
-                                    hideKeyboardWithClearFocus()
-                                    onSettingsClick()
-                                },
-                                verticalPadding = state.homeAppVerticalPadding.dp
-                            )
-                        }
-                    }
-                }
-
-                if (!state.hideAppDrawerSearch && state.drawerSearchBarAtBottom) {
-                    AppDrawerSearch(
-                        focusRequester = focusRequester,
-                        searchText = state.searchText,
-                        onSearchTextChange = viewModel::onSearchTextChange,
-                        onSettingsClick = {
-                            hideKeyboardWithClearFocus()
-                            onSettingsClick()
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(systemNavigationHeight))
-                }
             },
             sheetPeekHeight = sheetPeekHeight,
             sheetContainerColor = MaterialTheme.colorScheme.surface,
             containerColor = MaterialTheme.colorScheme.surface
         ) { paddingValues ->
             if (state.initialLoaded && state.favouriteApps.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .consumeWindowInsets(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    EmptyScreenView(
-                        title = stringResource(R.string.no_favourites_added),
-                        subTitle = stringResource(R.string.add_your_favourite_apps_to_access_them_easily),
-                        button = {
-                            Button(onClick = onAddFavouriteAppsClick) {
-                                Text(text = stringResource(R.string.add_favourite_apps))
-                            }
-                        }
-                    )
-                }
+                EmptyHomeBody(
+                    paddingValues = paddingValues,
+                    onAddFavouriteAppsClick = onAddFavouriteAppsClick
+                )
             } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .consumeWindowInsets(paddingValues)
-                ) {
-                    if (state.showHomeClock || state.showScreenTimeWidget) {
-                        Column(
-                            modifier = Modifier.padding(
-                                horizontal = Dimens.APP_HORIZONTAL_SPACING,
-                                vertical = 16.dp
-                            )
-                        ) {
-                            if (state.showHomeClock) {
-                                TimeAndDateView(
-                                    horizontalAlignment = state.homeClockAlignment,
-                                    clockMode = state.homeClockMode,
-                                    twentyFourHourFormat = state.twentyFourHourFormat,
-                                    showBatteryLevel = state.showBatteryLevel
-                                )
-                            }
-
-                            if (state.showScreenTimeWidget && state.screenTime.isNotEmpty()) {
-                                if (state.showHomeClock) {
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                }
-
-                                ScreenTimeView(
-                                    horizontalAlignment = state.homeClockAlignment,
-                                    screenTime = state.screenTime,
-                                    refreshScreenTime = viewModel::refreshScreenTime,
-                                    onClick = context::openDigitalWellbeing
-                                )
-                            }
-                        }
-                    }
-
-                    LazyColumn(
-                        state = homeLazyListState,
-                        modifier = Modifier
-                            .weight(1f)
-                            .nestedScroll(nestedScrollConnection),
-                        contentPadding = paddingValues,
-                        verticalArrangement = state.appsArrangementVertical
-                    ) {
-                        items(items = state.favouriteApps, key = { it.id }) { appInfo ->
-                            AppNameItem(
-                                modifier = Modifier.animateItem(),
-                                appName = appInfo.name,
-                                isFavourite = appInfo.isFavourite,
-                                isHidden = appInfo.isHidden,
-                                isWorkProfile = appInfo.isWorkProfile,
-                                onClick = { viewModel.onLaunchAppClick(appInfo) },
-                                onToggleFavouriteClick = {
-                                    viewModel.onToggleFavouriteAppClick(
-                                        appInfo
-                                    )
-                                },
-                                onRenameClick = { viewModel.onRenameAppClick(appInfo) },
-                                onToggleHideClick = { viewModel.onToggleHideClick(appInfo) },
-                                onAppInfoClick = { context.launchAppInfo(appInfo) },
-                                appsArrangement = state.appsArrangementHorizontal,
-                                textSize = state.homeTextSize.sp,
-                                onUninstallClick = { context.uninstallApp(appInfo) },
-                                showNotificationDot = appInfo.showNotificationDot,
-                                verticalPadding = state.homeAppVerticalPadding.dp
-                            )
-                        }
-                    }
-                }
+                HomeBody(
+                    paddingValues = paddingValues,
+                    state = state,
+                    viewModel = viewModel,
+                    homeLazyListState = homeLazyListState,
+                    nestedScrollConnection = nestedScrollConnection
+                )
             }
         }
 
@@ -453,32 +270,5 @@ fun HomeScreen(
             onRenameClick = viewModel::onRenameApp,
             onCancelClick = viewModel::onDismissRenameAppDialog
         )
-    }
-}
-
-@Composable
-private fun AppDrawerSearch(
-    focusRequester: FocusRequester,
-    searchText: String,
-    onSearchTextChange: (String) -> Unit,
-    onSettingsClick: () -> Unit,
-) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        SearchItem(
-            modifier = Modifier
-                .weight(1f)
-                .focusRequester(focusRequester),
-            searchText = searchText,
-            onSearchTextChange = onSearchTextChange,
-            endPadding = 0.dp
-        )
-        IconButton(
-            onClick = onSettingsClick
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Settings,
-                contentDescription = stringResource(R.string.settings)
-            )
-        }
     }
 }
