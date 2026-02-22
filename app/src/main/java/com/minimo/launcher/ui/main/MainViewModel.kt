@@ -70,6 +70,16 @@ class MainViewModel @Inject constructor(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            preferenceHelper.getEnableWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(enableWallpaper = enable)
+                    }
+                }
+        }
     }
 
     fun onHomeButtonPressed() {

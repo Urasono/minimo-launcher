@@ -107,4 +107,5 @@
     <string name="top">Top</string>
     <string name="bottom">Bottom</string>
     <string name="home_apps_alignment_vertical">Home Apps Alignment Vertical</string>
+    <string name="enable_wallpaper">Enable Wallpaper</string>
 </resources>

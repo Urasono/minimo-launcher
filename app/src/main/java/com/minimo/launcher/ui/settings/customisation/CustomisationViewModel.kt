@@ -206,6 +206,16 @@ class CustomisationViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            preferenceHelper.getEnableWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(enableWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
             preferenceHelper.getAutoOpenApp()
                 .distinctUntilChanged()
                 .collect { enable ->
@@ -360,6 +370,11 @@ class CustomisationViewModel @Inject constructor(
         }
     }
 
+    fun onToggleEnableWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setEnableWallpaper(_state.value.enableWallpaper.not())
+        }
+    }
 
     fun onToggleDoubleTapToLock() {
         viewModelScope.launch {

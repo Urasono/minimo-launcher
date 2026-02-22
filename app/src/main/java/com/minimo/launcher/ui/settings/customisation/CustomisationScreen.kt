@@ -174,6 +174,12 @@ fun CustomisationScreen(
             }
 
             ToggleItem(
+                title = stringResource(R.string.enable_wallpaper),
+                isChecked = state.enableWallpaper,
+                onToggleClick = viewModel::onToggleEnableWallpaper
+            )
+
+            ToggleItem(
                 title = stringResource(R.string.set_wallpaper_to_theme_color),
                 isChecked = state.setWallpaperToThemeColor,
                 onToggleClick = viewModel::onToggleSetWallpaperToThemeColor

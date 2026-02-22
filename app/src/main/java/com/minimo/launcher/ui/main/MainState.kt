@@ -8,4 +8,5 @@ data class MainState(
     val useDynamicTheme: Boolean = false,
     val blackTheme: Boolean = false,
     val setWallpaperToThemeColor: Boolean = false,
+    val enableWallpaper: Boolean = false,
 )

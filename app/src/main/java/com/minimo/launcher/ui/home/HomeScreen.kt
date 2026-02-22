@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
@@ -198,8 +199,9 @@ fun HomeScreen(
 
     val sheetPeekHeight by remember {
         derivedStateOf {
-            if (state.hideAppDrawerArrow) {
-                systemNavigationHeight
+            // Don't peek the bottom sheet if either the hideAppDrawerArrow or enableWallpaper is true
+            if (state.hideAppDrawerArrow || state.enableWallpaper) {
+                0.dp
             } else {
                 56.dp + systemNavigationHeight
             }
@@ -234,7 +236,7 @@ fun HomeScreen(
             },
             sheetPeekHeight = sheetPeekHeight,
             sheetContainerColor = MaterialTheme.colorScheme.surface,
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = if (state.enableWallpaper) Color.Transparent else MaterialTheme.colorScheme.surface
         ) { paddingValues ->
             if (state.initialLoaded && state.favouriteApps.isEmpty()) {
                 EmptyHomeBody(
@@ -258,7 +260,7 @@ fun HomeScreen(
                 .align(Alignment.BottomCenter)
                 .height(systemNavigationHeight)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(if (state.enableWallpaper) Color.Transparent else MaterialTheme.colorScheme.surface)
         )
     }
 

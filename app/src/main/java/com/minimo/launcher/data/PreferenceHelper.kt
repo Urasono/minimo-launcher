@@ -26,6 +26,7 @@ class PreferenceHelper @Inject constructor(
         private val KEY_THEME_MODE = stringPreferencesKey("KEY_THEME_MODE")
         private val KEY_SET_WALLPAPER_TO_THEME_COLOR =
             booleanPreferencesKey("KEY_SET_WALLPAPER_TO_THEME_COLOR")
+        private val KEY_ENABLE_WALLPAPER = booleanPreferencesKey("KEY_ENABLE_WALLPAPER")
         private val KEY_HOME_APPS_ALIGN_HORIZONTAL = stringPreferencesKey("KEY_HOME_APPS_ALIGN")
         private val KEY_HOME_APPS_ALIGN_VERTICAL =
             stringPreferencesKey("KEY_HOME_APPS_ALIGN_VERTICAL")
@@ -306,6 +307,16 @@ class PreferenceHelper @Inject constructor(
 
     fun getSetWallpaperToThemeColor(): Flow<Boolean> {
         return preferences.data.map { it[KEY_SET_WALLPAPER_TO_THEME_COLOR] ?: false }
+    }
+
+    suspend fun setEnableWallpaper(enable: Boolean) {
+        preferences.edit {
+            it[KEY_ENABLE_WALLPAPER] = enable
+        }
+    }
+
+    fun getEnableWallpaper(): Flow<Boolean> {
+        return preferences.data.map { it[KEY_ENABLE_WALLPAPER] ?: false }
     }
 
     suspend fun setAutoOpenApp(enable: Boolean) {

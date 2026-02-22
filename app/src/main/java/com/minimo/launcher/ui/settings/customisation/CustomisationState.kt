@@ -19,6 +19,7 @@ data class CustomisationState(
     val dynamicTheme: Boolean = false,
     val blackTheme: Boolean = false,
     val setWallpaperToThemeColor: Boolean = false,
+    val enableWallpaper: Boolean = false,
     val homeClockMode: HomeClockMode? = null,
     val doubleTapToLock: Boolean = false,
     val twentyFourHourFormat: Boolean = false,

@@ -43,6 +43,7 @@ fun AppTheme(
     useDynamicTheme: Boolean,
     statusBarVisible: Boolean,
     setWallpaperToThemeColor: Boolean,
+    enableWallpaper: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -96,7 +97,8 @@ fun AppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            val surfaceColor = colorScheme.surface.toArgb()
+            val surfaceColor =
+                if (enableWallpaper) Color.Transparent.toArgb() else colorScheme.surface.toArgb()
             window.statusBarColor = surfaceColor
             window.navigationBarColor = surfaceColor
 
@@ -111,6 +113,12 @@ fun AppTheme(
                     WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 insetsController.hide(WindowInsetsCompat.Type.statusBars())
             }
+
+            /*            if (enableWallpaper) {
+                            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+                        } else {
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+                        }*/
 
             window.setBackgroundDrawable(surfaceColor.toDrawable())
         }
