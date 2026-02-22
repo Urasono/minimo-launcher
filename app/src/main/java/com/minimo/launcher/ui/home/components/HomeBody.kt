@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +41,13 @@ fun HomeBody(
 ) {
     val context = LocalContext.current
 
+    val textColor = if (state.enableWallpaper) Color.White else Color.Unspecified
+    val textShadow = if (state.enableWallpaper) {
+        Shadow(color = Color.Black.copy(alpha = 0.5f), offset = Offset(2f, 2f), blurRadius = 4f)
+    } else {
+        null
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +65,9 @@ fun HomeBody(
                         horizontalAlignment = state.homeClockAlignment,
                         clockMode = state.homeClockMode,
                         twentyFourHourFormat = state.twentyFourHourFormat,
-                        showBatteryLevel = state.showBatteryLevel
+                        showBatteryLevel = state.showBatteryLevel,
+                        textColor = textColor,
+                        textShadow = textShadow
                     )
                 }
 
@@ -68,7 +80,9 @@ fun HomeBody(
                         horizontalAlignment = state.homeClockAlignment,
                         screenTime = state.screenTime,
                         refreshScreenTime = viewModel::refreshScreenTime,
-                        onClick = context::openDigitalWellbeing
+                        onClick = context::openDigitalWellbeing,
+                        textColor = textColor,
+                        textShadow = textShadow
                     )
                 }
             }
@@ -102,7 +116,9 @@ fun HomeBody(
                     textSize = state.homeTextSize.sp,
                     onUninstallClick = { context.uninstallApp(appInfo) },
                     showNotificationDot = appInfo.showNotificationDot,
-                    verticalPadding = state.homeAppVerticalPadding.dp
+                    verticalPadding = state.homeAppVerticalPadding.dp,
+                    textColor = textColor,
+                    textShadow = textShadow
                 )
             }
         }

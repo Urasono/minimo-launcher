@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -35,7 +38,9 @@ fun TimeAndDateView(
     horizontalAlignment: Alignment.Horizontal,
     clockMode: HomeClockMode,
     twentyFourHourFormat: Boolean,
-    showBatteryLevel: Boolean
+    showBatteryLevel: Boolean,
+    textColor: Color = Color.Unspecified,
+    textShadow: Shadow? = null
 ) {
     val context = LocalContext.current
 
@@ -73,7 +78,9 @@ fun TimeAndDateView(
                 modifier = Modifier.clickable(onClick = context::openDefaultClockApp),
                 text = currentDateTime.format(timeFormatter).uppercase(),
                 fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = textColor,
+                style = LocalTextStyle.current.copy(shadow = textShadow)
             )
         }
         if (clockMode != HomeClockMode.TimeOnly) {
@@ -83,19 +90,25 @@ fun TimeAndDateView(
                     modifier = Modifier.clickable(onClick = context::openDefaultCalendarApp),
                     text = currentDateTime.format(dateFormatter),
                     fontSize = dateFontSize,
-                    fontWeight = dateFontWeight
+                    fontWeight = dateFontWeight,
+                    color = textColor,
+                    style = LocalTextStyle.current.copy(shadow = textShadow)
                 )
 
                 if (showBatteryLevel) {
                     Text(
                         "  |  ",
                         fontSize = dateFontSize,
-                        fontWeight = dateFontWeight
+                        fontWeight = dateFontWeight,
+                        color = textColor,
+                        style = LocalTextStyle.current.copy(shadow = textShadow)
                     )
 
                     BatteryPercentView(
                         fontSize = dateFontSize,
-                        fontWeight = dateFontWeight
+                        fontWeight = dateFontWeight,
+                        textColor = textColor,
+                        textShadow = textShadow
                     )
                 }
             }

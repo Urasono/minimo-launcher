@@ -44,6 +44,7 @@ fun AppTheme(
     statusBarVisible: Boolean,
     setWallpaperToThemeColor: Boolean,
     enableWallpaper: Boolean = false,
+    isHomeScreen: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -103,8 +104,14 @@ fun AppTheme(
             window.navigationBarColor = surfaceColor
 
             val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = isLightTheme
-            insetsController.isAppearanceLightNavigationBars = isLightTheme
+
+            if (enableWallpaper && isHomeScreen) {
+                insetsController.isAppearanceLightStatusBars = false
+                insetsController.isAppearanceLightNavigationBars = false
+            } else {
+                insetsController.isAppearanceLightStatusBars = isLightTheme
+                insetsController.isAppearanceLightNavigationBars = isLightTheme
+            }
 
             if (statusBarVisible) {
                 insetsController.show(WindowInsetsCompat.Type.statusBars())

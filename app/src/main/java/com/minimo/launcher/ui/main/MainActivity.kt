@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.minimo.launcher.ui.navigation.AppNavGraph
 import com.minimo.launcher.ui.navigation.Routes
@@ -37,6 +38,9 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val state by viewModel.state.collectAsState()
 
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val isHomeScreen = navBackStackEntry?.destination?.route == Routes.HOME
+
             ObserveNavigationEvents(
                 navController = navController,
                 homePressedNotifier = viewModel.getHomePressedNotifier()
@@ -48,7 +52,8 @@ class MainActivity : ComponentActivity() {
                 useDynamicTheme = state.useDynamicTheme,
                 blackTheme = state.blackTheme,
                 setWallpaperToThemeColor = state.setWallpaperToThemeColor,
-                enableWallpaper = state.enableWallpaper
+                enableWallpaper = state.enableWallpaper,
+                isHomeScreen = isHomeScreen
             ) {
                 AppNavGraph(
                     navController = navController,
