@@ -196,11 +196,11 @@ class CustomisationViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            preferenceHelper.getSetWallpaper()
+            preferenceHelper.getSetWallpaperToThemeColor()
                 .distinctUntilChanged()
                 .collect { enable ->
                     _state.update {
-                        it.copy(setWallpaper = enable)
+                        it.copy(setWallpaperToThemeColor = enable)
                     }
                 }
         }
@@ -354,9 +354,9 @@ class CustomisationViewModel @Inject constructor(
         }
     }
 
-    fun onToggleSetWallpaper() {
+    fun onToggleSetWallpaperToThemeColor() {
         viewModelScope.launch {
-            preferenceHelper.setSetWallpaper(_state.value.setWallpaper.not())
+            preferenceHelper.setSetWallpaperToThemeColor(_state.value.setWallpaperToThemeColor.not())
         }
     }
 

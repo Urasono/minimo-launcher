@@ -7,5 +7,5 @@ data class MainState(
     val statusBarVisible: Boolean = true,
     val useDynamicTheme: Boolean = false,
     val blackTheme: Boolean = false,
-    val setWallpaper: Boolean = false,
+    val setWallpaperToThemeColor: Boolean = false,
 )

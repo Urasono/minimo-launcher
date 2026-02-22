@@ -62,11 +62,11 @@ class MainViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            preferenceHelper.getSetWallpaper()
+            preferenceHelper.getSetWallpaperToThemeColor()
                 .distinctUntilChanged()
                 .collect { enable ->
                     _state.update {
-                        it.copy(setWallpaper = enable)
+                        it.copy(setWallpaperToThemeColor = enable)
                     }
                 }
         }

@@ -3,7 +3,6 @@ package com.minimo.launcher.ui.theme
 import android.app.Activity
 import android.app.WallpaperManager
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -12,18 +11,21 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.graphics.set
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.minimo.launcher.utils.AndroidUtils
-import androidx.core.graphics.createBitmap
-import androidx.core.graphics.set
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private val DarkColorScheme = darkColorScheme()
 
@@ -34,19 +36,13 @@ private val BlackColorScheme = darkColorScheme(
     surface = Color.Black
 )
 
-fun createSolidColorBitmap(color: Int): Bitmap {
-    val bitmap = createBitmap(1, 1)
-    bitmap[0, 0] = color
-    return bitmap
-}
-
 @Composable
 fun AppTheme(
     themeMode: ThemeMode,
     blackTheme: Boolean,
     useDynamicTheme: Boolean,
     statusBarVisible: Boolean,
-    setWallpaper: Boolean,
+    setWallpaperToThemeColor: Boolean,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -71,6 +67,7 @@ fun AppTheme(
             }
         }
     }
+
     fun getLightTheme(context: Context): ColorScheme {
         return if (isDynamicTheme) {
             dynamicLightColorScheme(context)
@@ -118,15 +115,32 @@ fun AppTheme(
             window.setBackgroundDrawable(surfaceColor.toDrawable())
         }
     }
-    if (setWallpaper) {
-        val wallpaperManager = WallpaperManager.getInstance(context)
-		val wallpaperColor = colorScheme.background.toArgb()
-        val wallpaper = createSolidColorBitmap(wallpaperColor)
-        wallpaperManager.setBitmap(wallpaper)
+
+    if (setWallpaperToThemeColor) {
+        // Only run when the background color changes, and execute setting the wallpaper on the IO thread.
+        LaunchedEffect(colorScheme.surface) {
+            withContext(Dispatchers.IO) {
+                updateWallpaper(context, colorScheme.surface)
+            }
+        }
     }
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
+}
+
+fun updateWallpaper(context: Context, color: Color) {
+    try {
+        val wallpaperManager = WallpaperManager.getInstance(context)
+
+        val bitmap = createBitmap(1, 1)
+        bitmap[0, 0] = color.toArgb()
+
+        wallpaperManager.setBitmap(bitmap)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

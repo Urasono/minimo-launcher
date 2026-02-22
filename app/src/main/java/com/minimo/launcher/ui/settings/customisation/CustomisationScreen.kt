@@ -174,9 +174,9 @@ fun CustomisationScreen(
             }
 
             ToggleItem(
-                title = stringResource(R.string.set_wallpaper),
-                isChecked = state.setWallpaper,
-                onToggleClick = viewModel::onToggleSetWallpaper
+                title = stringResource(R.string.set_wallpaper_to_theme_color),
+                isChecked = state.setWallpaperToThemeColor,
+                onToggleClick = viewModel::onToggleSetWallpaperToThemeColor
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
