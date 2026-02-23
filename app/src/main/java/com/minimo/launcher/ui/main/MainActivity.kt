@@ -53,7 +53,8 @@ class MainActivity : ComponentActivity() {
                 blackTheme = state.blackTheme,
                 setWallpaperToThemeColor = state.setWallpaperToThemeColor,
                 enableWallpaper = state.enableWallpaper,
-                isHomeScreen = isHomeScreen
+                isHomeScreen = isHomeScreen,
+                lightTextOnWallpaper = state.lightTextOnWallpaper
             ) {
                 AppNavGraph(
                     navController = navController,

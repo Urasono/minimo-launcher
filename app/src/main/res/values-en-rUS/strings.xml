@@ -108,4 +108,6 @@
     <string name="bottom">Bottom</string>
     <string name="home_apps_alignment_vertical">Home Apps Alignment Vertical</string>
     <string name="enable_wallpaper">Enable Wallpaper</string>
+    <string name="dim_wallpaper">Dim Wallpaper</string>
+    <string name="light_text_on_wallpaper">Light Text on Wallpaper</string>
 </resources>

@@ -27,6 +27,9 @@ class PreferenceHelper @Inject constructor(
         private val KEY_SET_WALLPAPER_TO_THEME_COLOR =
             booleanPreferencesKey("KEY_SET_WALLPAPER_TO_THEME_COLOR")
         private val KEY_ENABLE_WALLPAPER = booleanPreferencesKey("KEY_ENABLE_WALLPAPER")
+        private val KEY_LIGHT_TEXT_ON_WALLPAPER =
+            booleanPreferencesKey("KEY_LIGHT_TEXT_ON_WALLPAPER")
+        private val KEY_DIM_WALLPAPER = booleanPreferencesKey("KEY_DIM_WALLPAPER")
         private val KEY_HOME_APPS_ALIGN_HORIZONTAL = stringPreferencesKey("KEY_HOME_APPS_ALIGN")
         private val KEY_HOME_APPS_ALIGN_VERTICAL =
             stringPreferencesKey("KEY_HOME_APPS_ALIGN_VERTICAL")
@@ -317,6 +320,26 @@ class PreferenceHelper @Inject constructor(
 
     fun getEnableWallpaper(): Flow<Boolean> {
         return preferences.data.map { it[KEY_ENABLE_WALLPAPER] ?: false }
+    }
+
+    suspend fun setLightTextOnWallpaper(enable: Boolean) {
+        preferences.edit {
+            it[KEY_LIGHT_TEXT_ON_WALLPAPER] = enable
+        }
+    }
+
+    fun getLightTextOnWallpaper(): Flow<Boolean> {
+        return preferences.data.map { it[KEY_LIGHT_TEXT_ON_WALLPAPER] ?: true }
+    }
+
+    suspend fun setDimWallpaper(enable: Boolean) {
+        preferences.edit {
+            it[KEY_DIM_WALLPAPER] = enable
+        }
+    }
+
+    fun getDimWallpaper(): Flow<Boolean> {
+        return preferences.data.map { it[KEY_DIM_WALLPAPER] ?: false }
     }
 
     suspend fun setAutoOpenApp(enable: Boolean) {

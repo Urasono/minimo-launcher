@@ -216,6 +216,26 @@ class CustomisationViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getDimWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(dimWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
             preferenceHelper.getAutoOpenApp()
                 .distinctUntilChanged()
                 .collect { enable ->
@@ -373,6 +393,18 @@ class CustomisationViewModel @Inject constructor(
     fun onToggleEnableWallpaper() {
         viewModelScope.launch {
             preferenceHelper.setEnableWallpaper(_state.value.enableWallpaper.not())
+        }
+    }
+
+    fun onToggleLightTextOnWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setLightTextOnWallpaper(_state.value.lightTextOnWallpaper.not())
+        }
+    }
+
+    fun onToggleDimWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setDimWallpaper(_state.value.dimWallpaper.not())
         }
     }
 

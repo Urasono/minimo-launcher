@@ -80,6 +80,16 @@ class MainViewModel @Inject constructor(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
     }
 
     fun onHomeButtonPressed() {

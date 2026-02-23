@@ -216,9 +216,31 @@ fun HomeScreen(
     val safeDrawingTop =
         WindowInsets.statusBars.union(WindowInsets.ime).union(WindowInsets.displayCutout)
 
+    val boxBackgroundColor = remember(state.enableWallpaper, state.dimWallpaper) {
+        if (state.enableWallpaper) {
+            if (state.dimWallpaper) {
+                Color.Black.copy(alpha = 0.20f)
+            } else {
+                Color.Transparent
+            }
+        } else {
+            Color.Transparent
+        }
+    }
+
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val scaffoldContainerColor = remember(state.enableWallpaper) {
+        if (state.enableWallpaper) {
+            Color.Transparent
+        } else {
+            surfaceColor
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(boxBackgroundColor)
             .windowInsetsPadding(safeDrawingTop)
             .pointerInput(Unit) {
                 detectTapGestures(onDoubleTap = {
@@ -245,7 +267,7 @@ fun HomeScreen(
             },
             sheetPeekHeight = sheetPeekHeight,
             sheetContainerColor = MaterialTheme.colorScheme.surface,
-            containerColor = if (state.enableWallpaper) Color.Transparent else MaterialTheme.colorScheme.surface
+            containerColor = scaffoldContainerColor
         ) { paddingValues ->
             if (state.initialLoaded && state.favouriteApps.isEmpty()) {
                 EmptyHomeBody(

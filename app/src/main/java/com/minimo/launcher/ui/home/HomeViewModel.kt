@@ -339,6 +339,26 @@ class HomeViewModel @Inject constructor(
                 }
         }
 
+        viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getDimWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(dimWallpaper = enable)
+                    }
+                }
+        }
+
         listenForHomePressedEvent()
     }
 

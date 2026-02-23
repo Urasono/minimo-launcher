@@ -43,8 +43,9 @@ fun AppTheme(
     useDynamicTheme: Boolean,
     statusBarVisible: Boolean,
     setWallpaperToThemeColor: Boolean,
-    enableWallpaper: Boolean = false,
-    isHomeScreen: Boolean = true,
+    enableWallpaper: Boolean,
+    isHomeScreen: Boolean,
+    lightTextOnWallpaper: Boolean,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -106,8 +107,8 @@ fun AppTheme(
             val insetsController = WindowCompat.getInsetsController(window, view)
 
             if (enableWallpaper && isHomeScreen) {
-                insetsController.isAppearanceLightStatusBars = false
-                insetsController.isAppearanceLightNavigationBars = false
+                insetsController.isAppearanceLightStatusBars = !lightTextOnWallpaper
+                insetsController.isAppearanceLightNavigationBars = !lightTextOnWallpaper
             } else {
                 insetsController.isAppearanceLightStatusBars = isLightTheme
                 insetsController.isAppearanceLightNavigationBars = isLightTheme

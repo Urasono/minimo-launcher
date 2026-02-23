@@ -9,4 +9,5 @@ data class MainState(
     val blackTheme: Boolean = false,
     val setWallpaperToThemeColor: Boolean = false,
     val enableWallpaper: Boolean = false,
+    val lightTextOnWallpaper: Boolean = true,
 )

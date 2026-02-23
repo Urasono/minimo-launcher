@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -41,11 +42,25 @@ fun HomeBody(
 ) {
     val context = LocalContext.current
 
-    val textColor = if (state.enableWallpaper) Color.White else Color.Unspecified
-    val textShadow = if (state.enableWallpaper) {
-        Shadow(color = Color.Black.copy(alpha = 0.5f), offset = Offset(2f, 2f), blurRadius = 4f)
-    } else {
-        null
+    val textColor =
+        remember(state.enableWallpaper, state.lightTextOnWallpaper) {
+            if (state.enableWallpaper) {
+                if (state.lightTextOnWallpaper) Color.White else Color.Black
+            } else {
+                Color.Unspecified
+            }
+        }
+
+    val textShadow = remember(state.enableWallpaper, state.lightTextOnWallpaper) {
+        if (state.enableWallpaper && state.lightTextOnWallpaper) {
+            Shadow(
+                color = Color.Black.copy(alpha = 0.5f),
+                offset = Offset(2f, 2f),
+                blurRadius = 4f
+            )
+        } else {
+            null
+        }
     }
 
     Column(
