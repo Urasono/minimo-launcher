@@ -45,6 +45,7 @@ import com.minimo.launcher.ui.settings.customisation.components.ClockModeDropdow
 import com.minimo.launcher.ui.settings.customisation.components.EnableAccessibilityDialog
 import com.minimo.launcher.ui.settings.customisation.components.EnableAppUsageDialog
 import com.minimo.launcher.ui.settings.customisation.components.EnableNotificationsDialog
+import com.minimo.launcher.ui.settings.customisation.components.EnableSetWallpaperToThemeColorDialog
 import com.minimo.launcher.ui.settings.customisation.components.IgnoreSpecialCharacters
 import com.minimo.launcher.ui.settings.customisation.components.ThemeDropdown
 import com.minimo.launcher.ui.settings.customisation.components.ToggleItem
@@ -74,6 +75,7 @@ fun CustomisationScreen(
     var showEnableAccessibilityDialog by remember { mutableStateOf(false) }
     var showEnableNotificationPermissionDialog by remember { mutableStateOf(false) }
     var showEnableAppUsagePermissionDialog by remember { mutableStateOf(false) }
+    var showSetWallpaperToThemeColorDialog by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -196,7 +198,13 @@ fun CustomisationScreen(
             ToggleItem(
                 title = stringResource(R.string.set_wallpaper_to_theme_color),
                 isChecked = state.setWallpaperToThemeColor,
-                onToggleClick = viewModel::onToggleSetWallpaperToThemeColor
+                onToggleClick = {
+                    if (state.setWallpaperToThemeColor) {
+                        viewModel.onToggleSetWallpaperToThemeColor()
+                    } else {
+                        showSetWallpaperToThemeColorDialog = true
+                    }
+                }
             )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
@@ -515,6 +523,18 @@ fun CustomisationScreen(
                 },
                 onDismiss = {
                     showEnableAppUsagePermissionDialog = false
+                }
+            )
+        }
+
+        if (showSetWallpaperToThemeColorDialog) {
+            EnableSetWallpaperToThemeColorDialog(
+                onConfirm = {
+                    viewModel.onToggleSetWallpaperToThemeColor()
+                    showSetWallpaperToThemeColorDialog = false
+                },
+                onDismiss = {
+                    showSetWallpaperToThemeColorDialog = false
                 }
             )
         }

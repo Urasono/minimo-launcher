@@ -3,7 +3,7 @@
 Designed for users who want to de-clutter their home screen, Minimo offers a clean and intuitive
 interface that prioritizes functionality without unnecessary distractions.
 
-No wallpaper. No icons. No distractions.
+No icons. No distractions.
 
 ## Screenshots:
 
