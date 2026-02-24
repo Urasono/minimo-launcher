@@ -196,6 +196,46 @@ class CustomisationViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            preferenceHelper.getSetWallpaperToThemeColor()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(setWallpaperToThemeColor = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getEnableWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(enableWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getDimWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(dimWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
             preferenceHelper.getAutoOpenApp()
                 .distinctUntilChanged()
                 .collect { enable ->
@@ -341,6 +381,30 @@ class CustomisationViewModel @Inject constructor(
     fun onToggleBlackTheme() {
         viewModelScope.launch {
             preferenceHelper.setBlackTheme(_state.value.blackTheme.not())
+        }
+    }
+
+    fun onToggleSetWallpaperToThemeColor() {
+        viewModelScope.launch {
+            preferenceHelper.setSetWallpaperToThemeColor(_state.value.setWallpaperToThemeColor.not())
+        }
+    }
+
+    fun onToggleEnableWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setEnableWallpaper(_state.value.enableWallpaper.not())
+        }
+    }
+
+    fun onToggleLightTextOnWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setLightTextOnWallpaper(_state.value.lightTextOnWallpaper.not())
+        }
+    }
+
+    fun onToggleDimWallpaper() {
+        viewModelScope.launch {
+            preferenceHelper.setDimWallpaper(_state.value.dimWallpaper.not())
         }
     }
 

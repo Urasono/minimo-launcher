@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -21,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -47,7 +50,9 @@ fun AppNameItem(
     onLongClick: () -> Unit = { },
     onUninstallClick: () -> Unit,
     verticalPadding: Dp = 16.dp,
-    clickEnabled: Boolean = true
+    clickEnabled: Boolean = true,
+    textColor: Color = Color.Unspecified,
+    textShadow: Shadow? = null
 ) {
     var appBottomSheetVisible by remember { mutableStateOf(false) }
     val lineHeight by remember { derivedStateOf { textSize * 1.2 } }
@@ -80,24 +85,28 @@ fun AppNameItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = appsArrangement
     ) {
+        val resolvedColor =
+            if (textColor == Color.Unspecified) LocalContentColor.current else textColor
+
         if (isWorkProfile) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_work_profile),
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .size(16.dp),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = resolvedColor,
                 contentDescription = null
             )
         }
 
         Text(
             text = appName,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = resolvedColor,
             fontSize = textSize,
             lineHeight = lineHeight,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            style = LocalTextStyle.current.copy(shadow = textShadow)
         )
 
         if (showNotificationDot) {
@@ -106,7 +115,7 @@ fun AppNameItem(
                     .padding(horizontal = 11.dp)
                     .size(10.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = resolvedColor,
                         shape = CircleShape
                     )
             )

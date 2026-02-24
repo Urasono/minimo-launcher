@@ -18,6 +18,8 @@ data class CustomisationState(
     val autoOpenKeyboardAllApps: Boolean = false,
     val dynamicTheme: Boolean = false,
     val blackTheme: Boolean = false,
+    val setWallpaperToThemeColor: Boolean = false,
+    val enableWallpaper: Boolean = false,
     val homeClockMode: HomeClockMode? = null,
     val doubleTapToLock: Boolean = false,
     val twentyFourHourFormat: Boolean = false,
@@ -31,5 +33,7 @@ data class CustomisationState(
     val homeAppVerticalPadding: Float = Constants.DEFAULT_HOME_VERTICAL_PADDING.toFloat(),
     val ignoreSpecialCharacters: String = "",
     val hideAppDrawerSearch: Boolean = false,
-    val showScreenTimeWidget: Boolean = false
+    val showScreenTimeWidget: Boolean = false,
+    val lightTextOnWallpaper: Boolean = true,
+    val dimWallpaper: Boolean = false,
 )

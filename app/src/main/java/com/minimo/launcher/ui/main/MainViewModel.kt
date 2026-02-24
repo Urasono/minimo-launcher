@@ -60,6 +60,36 @@ class MainViewModel @Inject constructor(
                     }
                 }
         }
+
+        viewModelScope.launch {
+            preferenceHelper.getSetWallpaperToThemeColor()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(setWallpaperToThemeColor = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getEnableWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(enableWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
     }
 
     fun onHomeButtonPressed() {

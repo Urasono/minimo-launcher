@@ -317,6 +317,16 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            preferenceHelper.getEnableWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(enableWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
             preferenceHelper.getShowScreenTimeWidget()
                 .distinctUntilChanged()
                 .collect { enable ->
@@ -325,6 +335,26 @@ class HomeViewModel @Inject constructor(
                     }
                     if (enable) {
                         refreshScreenTime()
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getLightTextOnWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(lightTextOnWallpaper = enable)
+                    }
+                }
+        }
+
+        viewModelScope.launch {
+            preferenceHelper.getDimWallpaper()
+                .distinctUntilChanged()
+                .collect { enable ->
+                    _state.update {
+                        it.copy(dimWallpaper = enable)
                     }
                 }
         }

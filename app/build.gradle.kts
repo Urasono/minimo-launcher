@@ -15,8 +15,8 @@ android {
         applicationId = "com.minimo.launcher"
         minSdk = 26
         targetSdk = 35
-        versionCode = 64
-        versionName = "1.22.0"
+        versionCode = 67
+        versionName = "1.23.0"
     }
 
     buildFeatures {
@@ -78,6 +78,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
 
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     implementation("androidx.navigation:navigation-compose:2.9.0")

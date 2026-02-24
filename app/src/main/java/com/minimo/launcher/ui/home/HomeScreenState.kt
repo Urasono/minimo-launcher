@@ -34,4 +34,7 @@ data class HomeScreenState(
     val hideAppDrawerSearch: Boolean = false,
     val showScreenTimeWidget: Boolean = false,
     val screenTime: String = "",
+    val enableWallpaper: Boolean = false,
+    val lightTextOnWallpaper: Boolean = true,
+    val dimWallpaper: Boolean = false,
 )
