@@ -122,7 +122,8 @@ fun HomeScreen(
                 if (!state.isBottomSheetExpanded) {
                     viewModel.setBottomSheetExpanded(true)
 
-                    if (state.autoOpenKeyboardAllApps) {
+                    // Request focus only when the autoOpenKeyboardAllApps is true and drawer search bar is not hidden
+                    if (state.autoOpenKeyboardAllApps && !state.hideAppDrawerSearch) {
                         focusRequester.requestFocus()
                         keyboardController?.show()
                     }
@@ -216,6 +217,8 @@ fun HomeScreen(
     val safeDrawingTop =
         WindowInsets.statusBars.union(WindowInsets.ime).union(WindowInsets.displayCutout)
 
+    val surfaceColor = MaterialTheme.colorScheme.surface
+
     val boxBackgroundColor = remember(state.enableWallpaper, state.dimWallpaper) {
         if (state.enableWallpaper) {
             if (state.dimWallpaper) {
@@ -224,11 +227,10 @@ fun HomeScreen(
                 Color.Transparent
             }
         } else {
-            Color.Transparent
+            surfaceColor
         }
     }
 
-    val surfaceColor = MaterialTheme.colorScheme.surface
     val scaffoldContainerColor = remember(state.enableWallpaper) {
         if (state.enableWallpaper) {
             Color.Transparent
