@@ -142,7 +142,7 @@ fun AppTheme(
     )
 }
 
-fun updateWallpaper(context: Context, color: Color) {
+private fun updateWallpaper(context: Context, color: Color) {
     try {
         val wallpaperManager = WallpaperManager.getInstance(context)
 
