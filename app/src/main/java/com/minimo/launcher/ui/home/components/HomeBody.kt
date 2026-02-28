@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,12 +43,13 @@ fun HomeBody(
 ) {
     val context = LocalContext.current
 
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val textColor =
         remember(state.enableWallpaper, state.lightTextOnWallpaper) {
             if (state.enableWallpaper) {
                 if (state.lightTextOnWallpaper) Color.White else Color.Black
             } else {
-                Color.Unspecified
+                onSurfaceColor
             }
         }
 
@@ -133,7 +135,7 @@ fun HomeBody(
                     showNotificationDot = appInfo.showNotificationDot,
                     verticalPadding = state.homeAppVerticalPadding.dp,
                     textColor = textColor,
-                    textShadow = textShadow
+                    shadow = textShadow
                 )
             }
         }
