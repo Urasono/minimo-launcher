@@ -39,8 +39,8 @@ fun TimeAndDateView(
     clockMode: HomeClockMode,
     twentyFourHourFormat: Boolean,
     showBatteryLevel: Boolean,
-    textColor: Color = Color.Unspecified,
-    textShadow: Shadow? = null
+    textColor: Color,
+    textShadow: Shadow?
 ) {
     val context = LocalContext.current
 

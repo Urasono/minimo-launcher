@@ -20,8 +20,8 @@ import com.minimo.launcher.utils.BatteryChangeObserver
 fun BatteryPercentView(
     fontSize: TextUnit,
     fontWeight: FontWeight?,
-    textColor: Color = Color.Unspecified,
-    textShadow: Shadow? = null
+    textColor: Color,
+    textShadow: Shadow?
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

@@ -20,8 +20,8 @@ fun ScreenTimeView(
     screenTime: String,
     refreshScreenTime: () -> Unit,
     onClick: () -> Unit,
-    textColor: Color = Color.Unspecified,
-    textShadow: Shadow? = null
+    textColor: Color,
+    textShadow: Shadow?
 ) {
     // Refresh screen time when app resumes
     LifecycleResumeEffect(Unit) {
